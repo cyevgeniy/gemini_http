@@ -144,10 +144,8 @@ func parse(reader io.Reader, writer *bufio.Writer) {
 			continue
 		}
 
-		if r != "" {
-			writer.WriteString(trim(r) + "\n")
-			continue
-		}
+		writer.WriteString(trim(r) + "\n")
+
 	}
 
 	if verb {
