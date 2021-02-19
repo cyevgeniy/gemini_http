@@ -206,6 +206,14 @@ func openLink(idx int) {
      }
 }
 
+func openUrlHist(idx int) {
+     if len(urlHist)-1 >= idx {
+     	href := urlHist[idx]
+		links = nil
+     	getnprint(href, true)
+     }
+}
+
 
 func main() {
      var c string
@@ -237,8 +245,7 @@ func main() {
 	 if len(c) > 1 && c[0] == 'h' {
 	    idx, err := strconv.Atoi(c[1:])
 	    if err == nil {
-		   links = nil
-	       getnprint(urlHist[idx], true)
+	       openUrlHist(idx)
 	       continue
 	    }
 
