@@ -25,6 +25,7 @@ type Link struct {
 
 var links []*Link
 var currURL string
+var urlHist []string
 
 
 func trim(str string) string {
@@ -99,6 +100,12 @@ func printLinks() {
      }
 }
 
+func printHist() {
+	for i := range urlHist {
+		fmt.Printf("%d %s\n", i, urlHist[i])
+	}
+}
+
 func parse(reader io.Reader, writer *bufio.Writer) {
 
 	scanner := bufio.NewScanner(reader)
@@ -160,6 +167,7 @@ func getnprint(url string, refresh bool) {
     defer resp.Body.Close()
 
     currURL = url
+	urlHist = append(urlHist, currURL)
 
     writer := bufio.NewWriter(os.Stdout)
     parse(resp.Body, writer)
@@ -198,6 +206,21 @@ func main() {
 	 if c == "l" {
 	    printLinks()
 	    continue
+	 }
+
+	 if c == "h" {
+		printHist()
+	 	continue
+	 }
+
+	 if len(c) > 1 && c[0] == 'h' {
+	    idx, err := strconv.Atoi(c[1:])
+	    if err == nil {
+		   links = nil
+	       getnprint(urlHist[idx], true)
+	       continue
+	    }
+
 	 }
 
 	 if len(c) > 1 && c[0] == 'l' {
