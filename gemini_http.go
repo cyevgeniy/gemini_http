@@ -106,6 +106,25 @@ func printHist() {
 	}
 }
 
+func wrapStr(str string, width int) string {
+	if width >= len(str) || width < 1 {
+		return str
+	}
+
+	res := ""
+	cutStr := []rune(trim(str))
+
+	var i int
+
+	for i = 0; len(cutStr[i:]) > width; i += width {
+		res += string(cutStr[i: i + width]) + "\n"
+	}
+
+	res += string(cutStr[i:])
+
+	return res
+}
+
 func parse(reader io.Reader, writer *bufio.Writer) {
 
 	scanner := bufio.NewScanner(reader)
@@ -144,7 +163,7 @@ func parse(reader io.Reader, writer *bufio.Writer) {
 			continue
 		}
 
-		writer.WriteString(trim(r) + "\n")
+		writer.WriteString(wrapStr(r, 80) + "\n")
 
 	}
 
