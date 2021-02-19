@@ -57,6 +57,10 @@ func isHeader(str string) bool {
 	return res
 }
 
+func isVerb(str string) bool {
+	return len(trim(str)) >= 3 && trim(str)[0:3] == "```"
+}
+
 func toHeader(str string) string {
 	strCut := trim(str)
 	idx := strings.Index(strCut, " ")
@@ -134,7 +138,7 @@ func parse(reader io.Reader, writer *bufio.Writer) {
 	for scanner.Scan() {
 		r := scanner.Text()
 
-		if r == "```" {
+		if isVerb(r) {
 			verb = !verb
 
 			if verb {
