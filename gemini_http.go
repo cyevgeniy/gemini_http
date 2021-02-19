@@ -154,8 +154,7 @@ func getnprint(url string, refresh bool) {
 
     if err != nil {
      	fmt.Printf(ErrorColor, "Error when open url\n")
-	getnprint(currURL, false)
-	return
+		return
     }
 
     defer resp.Body.Close()
