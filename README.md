@@ -10,6 +10,22 @@ Simple client for viewing gemini files via HTTP.
 * ```hX```(X - url number) - Open previously visited url
 * ```q``` - quit
 
+### On Windows
+
+On windows, gemini_http works via git-bash.exe. It is the terminal emulator
+that comes with git for windows. If you have git installed, you probably
+already has git-bash.
+
+### Proxy
+
+If you want to use proxy, set is with command:
+
+```bash
+export HTTP_PROXY="http://proxyIp:proxyPort"
+```
+
+After that, gemini_http will use this proxy to send requests.
+
 ## Some screenshots
 
 ![Screenshot 1](https://github.com/cyevgeniy/gemini_http/blob/master/scr1.png)
