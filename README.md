@@ -27,7 +27,7 @@ already has ```git-bash```.
 
 ### Proxy
 
-If you want to use proxy, set is with command:
+If you want to use proxy, set it with command:
 
 ```bash
 export HTTP_PROXY="http://proxyIp:proxyPort"
