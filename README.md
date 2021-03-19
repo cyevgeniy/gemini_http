@@ -1,6 +1,15 @@
 # gemini_http
 Simple client for viewing gemini files via HTTP.
 
+## Why
+
+Gemini protocol is awesome, but it is also too hard to leave http to start using
+new protocol(personaly I think that new protocol was unneccasary(but it is still awesome) -
+using just gemini markup language is already does the same job, but simpler).
+```Gemini_http``` allows to
+use gemini files, but still staying at http(s) protocol - just drop
+your files somewhere at your server, and that's all.
+
 ## Usage
 
 * ```o``` - Open specified url (For example ```https://somedomain.com/index.gmi```).
@@ -12,9 +21,9 @@ Simple client for viewing gemini files via HTTP.
 
 ### On Windows
 
-On windows, gemini_http works via git-bash.exe. It is the terminal emulator
+On windows, ```gemini_http``` works via ```git-bash.exe```. It is the terminal emulator
 that comes with git for windows. If you have git installed, you probably
-already has git-bash.
+already has ```git-bash```.
 
 ### Proxy
 
