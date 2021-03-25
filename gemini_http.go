@@ -177,6 +177,10 @@ func parse(reader io.Reader, writer *bufio.Writer) {
 
 }
 
+func clearScreen() {
+	fmt.Print("\033[H\033[2J")
+}
+
 func getnprint(url string, refresh bool) {
     resp, err := http.Get(url)
 
@@ -193,7 +197,7 @@ func getnprint(url string, refresh bool) {
     writer := bufio.NewWriter(os.Stdout)
     parse(resp.Body, writer)
     if refresh {
-        fmt.Print("\033[H\033[2J")
+        clearScreen()
     }
     writer.Flush()
 }
