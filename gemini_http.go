@@ -239,8 +239,8 @@ func getnprint(url string, refresh bool) {
 }
 
 func openLink(idx int) {
-     if len(pl.Links)-1 >= idx {
-     	href := pl.Links[idx].Href
+     if link, isOk := pl.Links[idx]; isOk {
+     	href := link.Href
 	   	getnprint(href, true)
      }
 }
