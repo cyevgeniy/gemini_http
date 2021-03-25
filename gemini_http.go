@@ -8,6 +8,7 @@ import( "bufio"
 	"io"
 	"strconv"
 	"net/url"
+	"sort"
 )
 
 const (
@@ -21,9 +22,36 @@ const (
 type Link struct {
      Href string
      Alias string
+	 Idx int
 }
 
-var links []*Link
+type PageLinks struct{
+	idx int
+	Links map[int] *Link
+}
+
+func NewPageLinks() *PageLinks {
+	p := new(PageLinks)
+	p.idx = 0
+	p.Links = make(map[int] *Link)
+	
+	return p
+}
+
+func (p *PageLinks)Add(l *Link) {
+	p.idx += 1
+	p.Links[p.idx] = l
+	p.Links[p.idx].Idx = p.idx
+}
+
+var pl *PageLinks
+
+
+func init() {
+	pl = NewPageLinks()
+}
+
+
 var currURL string
 var urlHist []string
 
@@ -91,17 +119,23 @@ func toLink(str string) Link {
      return link
 }
 
-func toHref(str string) string {
-
-     link := toLink(str)
-
-     return "=> " + link.Alias
+func toHref(l *Link) string {
+    return "=> [" + strconv.Itoa(l.Idx) + "] " + l.Alias
 }
 
 func printLinks() {
-     for i := range links {
-     	 fmt.Printf("%d %s\n", i, links[i].Alias)
-     }
+
+	sortedKeys := make([]int, 0, len(pl.Links))
+	
+	for i := range pl.Links {
+		sortedKeys = append(sortedKeys, i)
+	}
+	
+	sort.Ints(sortedKeys)
+	
+	for i := range sortedKeys {
+     	 fmt.Printf("%d %s\n", sortedKeys[i], pl.Links[sortedKeys[i]].Alias)
+    }
 }
 
 func printHist() {
@@ -156,9 +190,10 @@ func parse(reader io.Reader, writer *bufio.Writer) {
 
 
 		if isLink(r) {
-			writer.WriteString(fmt.Sprintf(LinkColor, toHref(r) + "\n"))
 			link := toLink(r)
-			links = append(links, &link)
+			pl.Add(&link)
+			writer.WriteString(fmt.Sprintf(LinkColor, toHref(&link) + "\n"))
+
 			continue
 		}
 
@@ -195,6 +230,7 @@ func getnprint(url string, refresh bool) {
 	urlHist = append(urlHist, currURL)
 
     writer := bufio.NewWriter(os.Stdout)
+	pl = NewPageLinks()
     parse(resp.Body, writer)
     if refresh {
         clearScreen()
@@ -203,17 +239,15 @@ func getnprint(url string, refresh bool) {
 }
 
 func openLink(idx int) {
-     if len(links)-1 >= idx {
-     	href := links[idx].Href
-	links = nil
-     	getnprint(href, true)
+     if len(pl.Links)-1 >= idx {
+     	href := pl.Links[idx].Href
+	   	getnprint(href, true)
      }
 }
 
 func openUrlHist(idx int) {
      if len(urlHist)-1 >= idx {
      	href := urlHist[idx]
-		links = nil
      	getnprint(href, true)
      }
 }
@@ -230,7 +264,6 @@ func main() {
 	    fmt.Printf(InfoColor, "\nEnter url:")
 	    fmt.Scanf("%s", &url)
 	    if url != "" {
-	       links = nil
 	       getnprint(url, true)
 	    }
 	    continue
